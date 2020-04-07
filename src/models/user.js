@@ -50,7 +50,18 @@ const userSchema = new mongoose.Schema({
     }],
     avatar: {
         type: Buffer
-    }
+    },
+    // userRoles: [{
+    //     0: {
+    //         type:Number,
+    //         default: 0
+    //     }
+    // }],
+    // authStatusId: {
+    //     type: Number,
+    //     default: 1
+    // }
+    
 }, {
     timestamps: true
 })

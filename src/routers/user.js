@@ -6,7 +6,7 @@ const auth = require('../middleware/auth')
 const { sendWelcomeEmail, sendCancelationEmail } = require('../emails/account')
 const router = new express.Router()
 
-router.post('/users', async (req, res) => {
+router.post('/users/create', async (req, res) => {
     const user = new User(req.body)
 
     try {
@@ -23,7 +23,9 @@ router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({ user, token })
+        const data = user
+        res.send({ data, token })
+        console.log(data)
     } catch (e) {
         res.status(400).send()
     }
@@ -36,7 +38,7 @@ router.post('/users/logout', auth, async (req, res) => {
         })
         await req.user.save()
 
-        res.send()
+        res.send({status:1})
     } catch (e) {
         res.status(500).send()
     }
@@ -55,6 +57,16 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
 })
+
+// router.get('/users/find_by_criteria', async (req, res) => {
+//     try {
+//         const users = await User.find({})
+//         res.send(users)
+//     } catch (e) {
+//         res.status(500).send()
+//     }
+
+// })
 
 router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body)
